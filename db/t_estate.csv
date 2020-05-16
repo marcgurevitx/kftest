@@ -1,0 +1,26 @@
+id,object_id,title,address,floor,area,estatetype
+1,619b835e263e30371833b7cd8a039188d946b696,Apt. of Mary,"Jessica Shirley st., 13, 37",25,13.37,apartment
+2,12e95577a7d4f110eb2e10d7df7cb8110a93479c,Flat of Patricia,"Cynthia Angela st., 13, 37",24,15.44,flat
+3,1d93636620199fb8ea9fba3194ef519c5640f52d,Penthouse of Linda,"Melissa Brenda rd., 13, 37",23,17.51,penthouse
+4,208b55f9502b7398119f66b4fff91f5af8956a53,Apt. of Barbara,"Amy Anna square, 13, 37",22,19.58,apartment
+5,40ee6af975e0a2e6ea147db654fbdb5f1d723e43,Apt. of Elizabeth,"Rebecca Virginia rd., 13, 37",21,21.65,apartment
+6,d4bc1ccd92297625afc920a142bf9de18482d4d1,Flat of Jennifer,"Kathleen Pamela square, 13, 37",20,23.72,flat
+7,7ea227c39abaded8c5199641e9ce601e0e5ad3bb,Penthouse of Maria,"Martha Debra st., 13, 37",19,25.79,penthouse
+8,0f477b562bc7c245d687106c0b3297574c8a9fea,Apt. of Susan,"Amanda Stephanie st., 13, 37",18,27.86,apartment
+9,1d02eb9112e0e242e0ca142806005ec362e6213f,Penthouse of Margaret,"Carolyn Christine rd., 13, 37",17,29.93,penthouse
+10,17a9b3592e74dc4d48b02bca3a28ec41977275f3,Penthouse of Dorothy,"Marie Janet rd., 13, 37",16,32,penthouse
+11,957e68afedfee1df2b32c48e1b847d0763b7e83e,Apt. of Lisa,"Catherine Frances st., 13, 37",15,34.07,apartment
+12,2c17b720eaa5433330bf7c49fb6d44e90013801a,Penthouse of Nancy,"Ann Joyce rd., 13, 37",14,36.14,penthouse
+13,d5700f1188629b0858208783de6f1fba547f8105,Flat of Karen,"Diane Alice st., 13, 37",13,38.21,flat
+14,6a72ee649d0426f0a77987d99798e2572b57d982,Flat of Betty,"Julie Heather rd., 13, 37",12,40.28,flat
+15,fb9ea0453d5876f6f722ef12f75f7a92011cc00c,Penthouse of Helen,"Teresa Doris st., 13, 37",11,42.35,penthouse
+16,70708030bba928df352be40d36b68f111722b927,Apt. of Sandra,"Gloria Evelyn square, 13, 37",10,44.42,apartment
+17,3da29750552a41bd0105d73ab102472942f7d654,Penthouse of Donna,"Jean Cheryl square, 13, 37",9,46.49,penthouse
+18,55f8c18f07552c7f9312ef0a62a58846497b72b8,Flat of Carol,"Mildred Katherine st., 13, 37",8,48.56,flat
+19,1d52309210d9845a1183dfe839c5a534c9eae9a0,Penthouse of Ruth,"Joan Ashley square, 13, 37",7,50.63,penthouse
+20,c1fd0ac71465fed521a45aeaf9b7607ef28fbdbf,Penthouse of Sharon,"Judith Rose rd., 13, 37",6,52.7,penthouse
+21,6b03f09d7f3e4e9ef8bd6d3c40b369e613942272,Flat of Michelle,"Janice Kelly rd., 13, 37",5,54.77,flat
+22,99c9989cc916a45a0027144329778e9e8b435177,Apt. of Laura,"Nicole Judy rd., 13, 37",4,56.84,apartment
+23,997e95a0d0dcf24967a9883ac88951736d89af59,Apt. of Sarah,"Christina Kathy square, 13, 37",3,58.91,apartment
+24,2265ca4ad36be4db24a75bc95e58c5580dc694ec,Apt. of Kimberly,"Theresa Beverly rd., 13, 37",2,60.98,apartment
+25,bd00b8dc0d3e5175f2e9d288184b22d51671f122,Penthouse of Deborah,"Denise Tammy square, 13, 37",1,63.05,penthouse

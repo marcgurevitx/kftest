@@ -1,20 +1,31 @@
-from flask import Flask, render_template
+import os
+import pathlib
+
+from flask import Flask, current_app, render_template
+
+from . import db
 
 
-app = Flask(__name__)
-
-
-@app.route('/')
-def catalog():
+def create_app():
     """
-    список объектов недвижимости
+    Flask app factory
     """
-    return render_template("catalog.html")
-
-
-@app.route('/description/<object_id>')
-def description(object_id):
-    """
-    детальная страница объекта
-    """
-    return render_template("description.html", object_id=object_id)
+    app = Flask(__name__)
+    app.config.from_pyfile("local_secrets.py")
+    app.teardown_appcontext(db.close_connection)
+    
+    @app.route("/")
+    def catalog():
+        """
+        список объектов недвижимости
+        """
+        return render_template("catalog.html")
+    
+    @app.route("/description/<object_id>")
+    def description(object_id):
+        """
+        детальная страница объекта
+        """
+        return render_template("description.html", object_id=object_id)
+    
+    return app

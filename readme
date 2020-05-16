@@ -33,12 +33,21 @@
 
 ---
 
-Install:
+Setup Postgres:
+
+    # create user kftest with password 'kftest';
+    # create database kftest;
+    # grant all privileges on database kftest to kftest;
+
+Setup app:
 
     pip install -r requirements
+    echo 'POSTGRES_DSN = "dbname=kftest user=kftest password=kftest"' > kftest/local_secrets.py
+    psql -f db/createtables.sql -U kftest
+    psql -f db/populatetables.sql -U kftest
 
 Run:
 
-    FLASK_APP=kftest  flask run
+    flask run
 
 Go to http://127.0.0.1:5000/
