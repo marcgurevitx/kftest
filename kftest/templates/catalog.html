@@ -1,1 +1,10 @@
 <h1>Список объектов недвижимости</h1>
+
+{% for estate in estate_objects %}
+    <article>
+        <header>
+            <h1>{{ estate.title }}</h1>
+        </header>
+        Address: {{ estate.address }} <a href="{{ url_for("description", object_id=estate.object_id) }}">description</a>
+    </article>
+{% endfor %}

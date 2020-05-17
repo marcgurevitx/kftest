@@ -32,5 +32,6 @@ CREATE TABLE t_proximity (
     
     PRIMARY KEY(id),
     FOREIGN KEY(estate_id) REFERENCES t_estate(id) ON DELETE CASCADE,
-    FOREIGN KEY(metrostation_id) REFERENCES t_metrostation(id) ON DELETE CASCADE
+    FOREIGN KEY(metrostation_id) REFERENCES t_metrostation(id) ON DELETE CASCADE,
+    UNIQUE(estate_id, metrostation_id)  -- i guess
 );

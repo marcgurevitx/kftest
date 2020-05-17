@@ -1,1 +1,19 @@
-<h1>Детальная страница объекта {{ object_id }}</h1>
+<h1>Детальная страница объекта</h1>
+
+<article>
+    <p>Address: {{ estate.address }}</p>
+    <p>Floor: {{ estate.floor | integer_if_possible }}</p>
+    <p>Area: {{ estate.area }} square pounds</p>
+    <p>Type: {{ estate.estatetype }}</p>
+    <p>
+        Metro stations:
+        <ul>
+            {% for metro_station in estate.metro_stations %}
+                <li>{{ metro_station }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+    <footer>
+        <a href="{{ url_for("catalog") }}">return</a>
+    </footer>
+</article>

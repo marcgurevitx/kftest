@@ -42,7 +42,7 @@ Setup Postgres:
 Setup app:
 
     pip install -r requirements
-    echo 'POSTGRES_DSN = "dbname=kftest user=kftest password=kftest"' > kftest/local_secrets.py
+    echo 'POSTGRES_DSN = "dbname=kftest user=kftest password=kftest"' > kftest/local_config.py
     psql -f db/createtables.sql -U kftest
     psql -f db/populatetables.sql -U kftest
 
