@@ -1,10 +1,37 @@
 <h1>Список объектов недвижимости</h1>
 
-{% for estate in estate_objects %}
-    <article>
-        <header>
-            <h1>{{ estate.title }}</h1>
-        </header>
-        Address: {{ estate.address }} <a href="{{ url_for("description", object_id=estate.object_id) }}">description</a>
-    </article>
-{% endfor %}
+<section>
+    <header>
+        <h1>Filters</h1>
+    </header>
+    <form>
+        {% macro err(field) %}
+            {% if field.errors %}
+                <b style="color: red">☚ U WOT M8?</b>
+            {% endif %}
+        {% endmacro %}
+        
+        <div>{{ form.area_min.label }}: {{ form.area_min }} {{ err(form.area_min) }}</div>
+        <div>{{ form.area_max.label }}: {{ form.area_max }} {{ err(form.area_max) }}</div>
+        <div>{{ form.floor_min.label }}: {{ form.floor_min }} {{ err(form.floor_min) }}</div>
+        <div>{{ form.floor_max.label }}: {{ form.floor_max }} {{ err(form.floor_max) }}</div>
+        <div>{{ form.metro_stations.label }}: {{ form.metro_stations(size=15) }} {{ err(form.metro_stations) }}</div>
+        <input type="submit" />
+    </form>
+</section>
+
+<section>
+    <header>
+        <h1>Objects [{{ estate_objects | length }}]</h1>
+    </header>
+    {% for estate in estate_objects %}
+        <article>
+            <header>
+                <h1>{{ loop.index }}. {{ estate.title }}</h1>
+            </header>
+            Address: {{ estate.address }} | Floor: {{ estate.floor | integer_if_possible }} | Area: {{ estate.area }} | Type: {{ estate.estatetype }}<br />
+            Metro stations: {{ estate.metro_titles | join(", ") }}<br />
+            <a href="{{ url_for("description", object_id=estate.object_id) }}">description</a>
+        </article>
+    {% endfor %}
+</section>

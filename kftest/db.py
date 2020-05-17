@@ -2,11 +2,10 @@ from collections import namedtuple
 
 import psycopg2
 from flask import current_app, g
+from psycopg2 import sql
 
 
 ESTATE_FIELDS = "id,object_id,title,address,floor,area,estatetype"
-#METRO_FIELDS = "id,title"
-#PROXIMITY_FIELDS = "id,estate_id,metrostation_id"
 
 
 def get_connection():
@@ -28,22 +27,88 @@ def close_connection(error=None):
         conn.close()
 
 
-def get_estate_objects():
+def preload_metro_choices(app):
     """
-    Select estate objects
+    Load (and cache) all existing metro stations from database
+    """
+    
+    # get_connection() will not work here, because no app context
+    conn = psycopg2.connect(app.config["POSTGRES_DSN"])
+    
+    with conn, conn.cursor() as cursor:
+        cursor.execute("""
+        
+            SELECT
+                id,
+                title
+            FROM
+                t_metrostation
+            ;
+        
+        """, locals())
+        rv = cursor.fetchall()  # XXX: exposing database ID's to the user, i hope it's no big deal
+        return rv
+
+
+def get_estate_objects(criteria):
+    """
+    Select estate objects using criteria
     """
     with get_connection() as conn, conn.cursor() as cursor:
-        cursor.execute("""
+        
+        where1 = sql.SQL(" AND ").join(
+            filter(None, [
+                sql.SQL("1 = 1"),
+                sql.SQL("e.area >= {0}").format(sql.Literal(criteria["area_min"]))
+                if criteria["area_min"] is not None else None,
+                sql.SQL("e.area <= {0}").format(sql.Literal(criteria["area_max"]))
+                if criteria["area_max"] is not None else None,
+                sql.SQL("e.floor >= {0}").format(sql.Literal(criteria["floor_min"]))
+                if criteria["floor_min"] is not None else None,
+                sql.SQL("e.floor <= {0}").format(sql.Literal(criteria["floor_max"]))
+                if criteria["floor_max"] is not None else None,
+            ])
+        )
+        where2 = sql.SQL(" AND ").join(
+            filter(None, [
+                sql.SQL("1 = 1"),
+                sql.SQL("metro_ids && {0}").format(sql.Literal(criteria["metro_stations"]))
+                if len(criteria["metro_stations"]) > 0 else None,
+            ])
+        )
+        query = sql.SQL("""
         
             SELECT
                 *
             FROM
-                t_estate
+                ( SELECT
+                    e.id,
+                    e.object_id,
+                    e.title,
+                    e.address,
+                    e.floor,
+                    e.area,
+                    e.estatetype,
+                    ARRAY_AGG(m.id) as metro_ids,
+                    ARRAY_AGG(m.title) as metro_titles
+                FROM
+                    t_estate e
+                        LEFT JOIN
+                    t_proximity p ON e.id = p.estate_id
+                        LEFT JOIN
+                    t_metrostation m ON p.metrostation_id = m.id
+                WHERE
+                    {0}
+                GROUP BY
+                    e.id ) AS foo
+            WHERE
+                {1}
             ;
         
-        """, locals())
-        Result = namedtuple("Result", ESTATE_FIELDS)
-        rv = [Result(*e) for e in cursor]
+        """).format(where1, where2)
+        cursor.execute(query, locals())
+        Estate = namedtuple("Estate", ESTATE_FIELDS + ",metro_ids,metro_titles")
+        rv = [Estate(*e) for e in cursor]
         return rv
 
 
@@ -62,7 +127,7 @@ def get_estate_object(object_id):
                 e.floor,
                 e.area,
                 e.estatetype,
-                ARRAY_AGG(m.title)
+                ARRAY_AGG(m.title) as metro_stations
             FROM
                 t_estate e
                     LEFT JOIN
@@ -76,6 +141,6 @@ def get_estate_object(object_id):
             ;
         
         """, locals())
-        Result = namedtuple("Result", ESTATE_FIELDS + ",metro_stations")
-        rv = Result(*cursor.fetchone())
+        Estate = namedtuple("Estate", ESTATE_FIELDS + ",metro_stations")
+        rv = Estate(*cursor.fetchone())
         return rv

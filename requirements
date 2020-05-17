@@ -1,3 +1,4 @@
 flask
 psycopg2
 python-dotenv
+wtforms
