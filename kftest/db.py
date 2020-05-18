@@ -36,7 +36,7 @@ def preload_metro_choices(app):
     conn = psycopg2.connect(app.config["POSTGRES_DSN"])
     
     with conn, conn.cursor() as cursor:
-        cursor.execute("""
+        query = """
         
             SELECT
                 id,
@@ -45,8 +45,11 @@ def preload_metro_choices(app):
                 t_metrostation
             ;
         
-        """, locals())
+        """
+        app.logger.debug("Executing %s", query)
+        cursor.execute(query, locals())
         rv = cursor.fetchall()  # XXX: exposing database ID's to the user, i hope it's no big deal
+        app.logger.debug("Got %s", rv)
         return rv
 
 
@@ -76,7 +79,7 @@ def get_estate_objects(criteria):
                 if len(criteria["metro_stations"]) > 0 else None,
             ])
         )
-        query = sql.SQL("""
+        contructed_query = sql.SQL("""
         
             SELECT
                 *
@@ -106,9 +109,12 @@ def get_estate_objects(criteria):
             ;
         
         """).format(where1, where2)
+        query = contructed_query.as_string(conn)
+        current_app.logger.debug("Executing %s", query)
         cursor.execute(query, locals())
         Estate = namedtuple("Estate", ESTATE_FIELDS + ",metro_ids,metro_titles")
         rv = [Estate(*e) for e in cursor]
+        current_app.logger.debug("Got %s", rv)
         return rv
 
 
@@ -117,7 +123,7 @@ def get_estate_object(object_id):
     Select estate object by id
     """
     with get_connection() as conn, conn.cursor() as cursor:
-        cursor.execute("""
+        query = """
         
             SELECT
                 e.id,
@@ -140,7 +146,10 @@ def get_estate_object(object_id):
                 e.id
             ;
         
-        """, locals())
+        """
+        current_app.logger.debug("Executing %s", query)
+        cursor.execute(query, locals())
         Estate = namedtuple("Estate", ESTATE_FIELDS + ",metro_stations")
         rv = Estate(*cursor.fetchone())
+        current_app.logger.debug("Got %s", rv)
         return rv
