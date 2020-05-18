@@ -32,25 +32,27 @@ def preload_metro_choices(app):
     Load (and cache) all existing metro stations from database
     """
     
-    # get_connection() will not work here, because no app context
+    # get_connection() and close_connection() will not work here, because we're out of app context
     conn = psycopg2.connect(app.config["POSTGRES_DSN"])
-    
-    with conn, conn.cursor() as cursor:
-        query = """
-        
-            SELECT
-                id,
-                title
-            FROM
-                t_metrostation
-            ;
-        
-        """
-        app.logger.debug("Executing %s", query)
-        cursor.execute(query, locals())
-        rv = cursor.fetchall()  # XXX: exposing database ID's to the user, i hope it's no big deal
-        app.logger.debug("Got %s", rv)
-        return rv
+    try:
+        with conn, conn.cursor() as cursor:
+            query = """
+            
+                SELECT
+                    id,
+                    title
+                FROM
+                    t_metrostation
+                ;
+            
+            """
+            app.logger.debug("Executing %s", query)
+            cursor.execute(query, locals())
+            rv = cursor.fetchall()  # XXX: exposing database ID's to the user, i hope it's no big deal
+            app.logger.debug("Got %s", rv)
+            return rv
+    finally:
+        conn.close()
 
 
 def get_estate_objects(criteria):
